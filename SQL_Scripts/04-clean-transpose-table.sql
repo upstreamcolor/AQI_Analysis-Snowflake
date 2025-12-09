@@ -114,10 +114,10 @@ WITH
         FROM
             step01_combine_pollutant_cte
     )
-SELECT
-    *
-FROM
-    step02_replace_NA_cte;
+    SELECT
+        *
+    FROM
+        step02_replace_NA_cte;
 
 --check data
 SELECT
