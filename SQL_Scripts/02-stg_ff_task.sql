@@ -1,118 +1,82 @@
 -- change context
-use role sysadmin;
-use schema dev_db.stage_sch;
-use warehouse adhoc_wh;
+USE ROLE sysadmin;
+USE SCHEMA dev_db.stage_sch;
+USE WAREHOUSE adhoc_wh;
 
 -- create an internal stage, `raw_stg` and enable directory service
-create stage if not exists raw_stg
-directory = (enable = true)
-comment = 'stage to store raw data';
+CREATE STAGE IF NOT EXISTS raw_stg 
+DIRECTORY = (ENABLE = TRUE) 
+COMMENT = 'stage to store raw data';
 
 -- create `json_file_format` file format to process the JSON file
-create file format if not exists json_file_format 
-type = 'JSON'
-compression = 'AUTO' 
-comment = 'json file format';
+CREATE FILE FORMAT IF NOT EXISTS json_file_format 
+TYPE = 'JSON' 
+COMPRESSION = 'AUTO' 
+COMMENT = 'json file format';
 
-show stages;
-list @raw_stg;
+--check for stages
+SHOW STAGES;
 
--- load the data that has been downloaded manually
--- run the list command to check it
-select 
-    * 
-from 
-    @dev_db.stage_sch.raw_stg
-    (file_format => JSON_FILE_FORMAT) t;
-
-select 
-    Try_TO_TIMESTAMP(t.$1:records[0].last_update::text, 'dd-mm-yyyy hh24:mi:ss') as index_record_ts
-    ,t.$1
-    ,t.$1:total::int as record_count
-    ,t.$1:version::text as json_version  
-from 
-    @dev_db.stage_sch.raw_stg
-(file_format => JSON_FILE_FORMAT) t;
-
--- level3
-select 
-    TRY_TO_TIMESTAMP(t.$1:records[0].last_update::text, 'dd-mm-yyyy hh24:mi:ss') as index_record_ts
-    ,t.$1
-    ,t.$1:total::int as record_count
-    ,t.$1:version::text as json_version
-    -- meta data information
-    ,metadata$FILENAME as _stg_file_name
-    ,metadata$FILE_LAST_MODIFIED as _stg_file_load_ts
-    ,metadata$FILE_CONTENT_KEY as _stg_file_md5
-    ,current_timestamp() as _copy_data_ts
-from 
-    @dev_db.stage_sch.raw_stg
-(file_format => JSON_FILE_FORMAT) t;
+-- check for files in stage
+LIST @raw_stg;
 
 -- creating `raw_aqi` table to store raw air quality data
-create or replace transient table raw_aqi (
-    id int primary key autoincrement
-    ,index_record_ts timestamp not null
-    ,json_data variant not null
-    ,record_count number not null default 0
-    ,json_version text not null
+CREATE OR REPLACE TRANSIENT TABLE raw_aqi (
+    id INT primary key autoincrement
+    ,index_record_ts TIMESTAMP NOT NULL
+    ,json_data VARIANT NOT NULL
+    ,record_count NUMBER NOT NULL default 0
+    ,json_version TEXT NOT NULL
     -- audit columns for debugging
-    ,_stg_file_name text
-    ,_stg_file_load_ts timestamp
-    ,_stg_file_md5 text
-    ,_copy_data_ts timestamp default current_timestamp()
+    ,_stg_file_name TEXT
+    ,_stg_file_load_ts TIMESTAMP
+    ,_stg_file_md5 TEXT
+    ,_copy_data_ts TIMESTAMP default current_timestamp()
 );
 
 -- create task
-create or replace task copy_air_quality_data
-    warehouse = load_wh
-    schedule = 'USING CRON 0 * * * * Asia/Kolkata'
-as
+CREATE OR replace task copy_air_quality_data 
+    WAREHOUSE = load_wh 
+    SCHEDULE = 'USING CRON 0 * * * * Asia/Kolkata' 
+AS
 -- run copy command first to load data to `raw_aqi`
-copy into raw_aqi (index_record_ts,json_data,record_count,json_version,_stg_file_name,_stg_file_load_ts,_stg_file_md5,_copy_data_ts) 
-from 
-(
-    select 
-        Try_TO_TIMESTAMP(t.$1:records[0].last_update::text, 'dd-mm-yyyy hh24:mi:ss') as index_record_ts
-        ,t.$1
-        ,t.$1:total::int as record_count
-        ,t.$1:version::text as json_version
-        ,metadata$FILENAME as _stg_file_name
-        ,metadata$FILE_LAST_MODIFIED as _stg_file_load_ts
-        ,metadata$FILE_CONTENT_KEY as _stg_file_md5
-        ,current_timestamp() as _copy_data_ts        
-    from 
-        @dev_db.stage_sch.raw_stg as t
-)
-file_format = (format_name = 'dev_db.stage_sch.JSON_FILE_FORMAT') 
-ON_ERROR = ABORT_STATEMENT; 
+    COPY INTO raw_aqi (
+        index_record_ts,
+        json_data,
+        record_count,
+        json_version,
+        _stg_file_name,
+        _stg_file_load_ts,
+        _stg_file_md5,
+        _copy_data_ts
+    )
+    FROM
+    (
+        SELECT
+            Try_TO_TIMESTAMP(
+                t.$1:records[0].last_update::TEXT,
+                'dd-mm-yyyy hh24:mi:ss'
+            ) AS index_record_ts
+            ,t.$1
+            ,t.$1:total::INT AS record_count
+            ,t.$1:version::TEXT AS json_version
+            ,metadata$FILENAME AS _stg_file_name
+            ,metadata$FILE_LAST_MODIFIED AS _stg_file_load_ts
+            ,metadata$FILE_CONTENT_KEY AS _stg_file_md5
+            ,current_timestamp() AS _copy_data_ts
+        FROM
+            @dev_db.stage_sch.raw_stg AS t
+    ) file_format = (format_name = 'dev_db.stage_sch.JSON_FILE_FORMAT') ON_ERROR = ABORT_STATEMENT;
 
 -- granting exec access to tasks to `SYSADMIN` role
-use role accountadmin;
-grant execute task, execute managed task on account to role sysadmin;
-use role sysadmin;
+USE ROLE accountadmin;
+GRANT EXECUTE TASK, EXECUTE MANAGED TASK ON ACCOUNT TO ROLE sysadmin;
+USE ROLE sysadmin;
 
-alter task dev_db.stage_sch.copy_air_quality_data resume;
+ALTER TASK dev_db.stage_sch.copy_air_quality_data resume;
 
 -- check the data
-select 
+SELECT
     *
-from 
+FROM
     raw_aqi
-limit 10;
-
--- select with ranking
-select 
-    index_record_ts
-    ,record_count
-    ,json_version
-    ,_stg_file_name
-    ,_stg_file_load_ts
-    ,_stg_file_md5
-    ,_copy_data_ts,
-    row_number() over (partition by index_record_ts order by _stg_file_load_ts desc) as latest_file_rank
-from 
-    raw_aqi 
-order by 
-    index_record_ts desc
-limit 10;
