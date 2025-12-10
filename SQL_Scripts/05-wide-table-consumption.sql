@@ -85,42 +85,42 @@ CREATE OR REPLACE DYNAMIC TABLE aqi_final_wide_dt
     TARGET_LAG = '30 min' 
     WAREHOUSE = transform_wh 
 AS
-SELECT
-    index_record_ts
-    ,YEAR(index_record_ts) AS aqi_year
-    ,MONTH(index_record_ts) AS aqi_month
-    ,QUARTER(index_record_ts) AS aqi_quarter
-    ,DAY(index_record_ts) aqi_day
-    ,HOUR(index_record_ts) aqi_hour
-    ,country
-    ,state
-    ,city
-    ,station
-    ,latitude
-    ,longitude
-    ,pm10_avg
-    ,pm25_avg
-    ,so2_avg
-    ,no2_avg
-    ,nh3_avg
-    ,co_avg
-    ,o3_avg
-    ,prominent_index (pm25_avg, pm10_avg, so2_avg, no2_avg, nh3_avg, co_avg, o3_avg) AS prominent_pollutant,
-    CASE
-        WHEN three_sub_index_criteria (pm25_avg, pm10_avg, so2_avg, no2_avg, nh3_avg, co_avg, o3_avg) > 2 THEN 
-            GREATEST(
-            get_int (pm25_avg)
-            ,get_int (pm10_avg)
-            ,get_int (so2_avg)
-            ,get_int (no2_avg)
-            ,get_int (nh3_avg)
-            ,get_int (co_avg)
-            ,get_int (o3_avg)
-            )
-        ELSE 0
-    END AS aqi
-FROM
-    dev_db.clean_sch.clean_flatten_aqi_dt;
+    SELECT
+        index_record_ts
+        ,YEAR(index_record_ts) AS aqi_year
+        ,MONTH(index_record_ts) AS aqi_month
+        ,QUARTER(index_record_ts) AS aqi_quarter
+        ,DAY(index_record_ts) aqi_day
+        ,HOUR(index_record_ts) aqi_hour
+        ,country
+        ,state
+        ,city
+        ,station
+        ,latitude
+        ,longitude
+        ,pm10_avg
+        ,pm25_avg
+        ,so2_avg
+        ,no2_avg
+        ,nh3_avg
+        ,co_avg
+        ,o3_avg
+        ,prominent_index (pm25_avg, pm10_avg, so2_avg, no2_avg, nh3_avg, co_avg, o3_avg) AS prominent_pollutant,
+        CASE
+            WHEN three_sub_index_criteria (pm25_avg, pm10_avg, so2_avg, no2_avg, nh3_avg, co_avg, o3_avg) > 2 THEN 
+                GREATEST(
+                    get_int (pm25_avg)
+                    ,get_int (pm10_avg)
+                    ,get_int (so2_avg)
+                    ,get_int (no2_avg)
+                    ,get_int (nh3_avg)
+                    ,get_int (co_avg)
+                    ,get_int (o3_avg)
+                )
+            ELSE 0
+        END AS aqi
+    FROM
+        dev_db.clean_sch.clean_flatten_aqi_dt;
 
 -- check data
 SELECT
