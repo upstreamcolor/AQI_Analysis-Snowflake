@@ -3,7 +3,8 @@ USE ROLE sysadmin;
 USE SCHEMA dev_db.clean_sch;
 USE WAREHOUSE adhoc_wh;
 
--- creating dynamic table which refreshes when `raw_aqi` refreshes
+-- creating dynamic table `clean_aqi_dt` to store cleaned raw data, 
+-- which refreshes when `raw_aqi` refreshes
 CREATE OR REPLACE DYNAMIC TABLE clean_aqi_dt 
     TARGET_LAG = 'downstream' 
     WAREHOUSE = transform_wh 
