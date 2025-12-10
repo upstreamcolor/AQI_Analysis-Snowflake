@@ -2,6 +2,7 @@ USE ROLE sysadmin;
 USE SCHEMA dev_db.clean_sch;
 USE WAREHOUSE adhoc_wh;
 
+-- create dynamic table `clean_flatten_aqi_dt` to flatten the cleaned raw data in `clean_aqi_dt`
 CREATE OR REPLACE DYNAMIC TABLE clean_flatten_aqi_dt 
     TARGET_LAG = '30 min' 
     WAREHOUSE = transform_wh 
