@@ -35,11 +35,11 @@ CREATE OR REPLACE TRANSIENT TABLE raw_aqi (
 );
 
 -- create task
-CREATE OR replace task copy_air_quality_data 
+CREATE OR REPLACE TASK copy_air_quality_data 
     WAREHOUSE = load_wh 
     SCHEDULE = 'USING CRON 0 * * * * Asia/Kolkata' 
 AS
--- run copy command first to load data to `raw_aqi`
+    -- run copy command first to load data to `raw_aqi`
     COPY INTO raw_aqi (
         index_record_ts,
         json_data,
