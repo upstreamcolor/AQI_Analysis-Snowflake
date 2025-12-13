@@ -20,7 +20,7 @@ AS
                 ,_stg_file_load_ts
                 ,_stg_file_md5
                 ,_copy_data_ts
-                ,row_number() over (
+                ,ROW_NUMBER() OVER (
                     PARTITION BY
                         index_record_ts
                     ORDER BY
