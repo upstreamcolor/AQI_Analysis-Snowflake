@@ -1,9 +1,50 @@
-## AQI Analysis | <img src="https://raw.githubusercontent.com/upstreamcolor/AQI_Analysis-Snowflake/refs/heads/main/icons/snowflake.svg" width="20" /> <img src="https://raw.githubusercontent.com/upstreamcolor/AQI_Analysis-Snowflake/refs/heads/main/icons/streamlit.svg" width="20" /> <img src="https://raw.githubusercontent.com/upstreamcolor/AQI_Analysis-Snowflake/refs/heads/main/icons/githubactions.svg" width="20" />
+## AQI Data Pipeline | <img src="https://raw.githubusercontent.com/upstreamcolor/AQI_Analysis-Snowflake/refs/heads/main/icons/snowflake.svg" width="20" /> <img src="https://raw.githubusercontent.com/upstreamcolor/AQI_Analysis-Snowflake/refs/heads/main/icons/streamlit.svg" width="20" /> <img src="https://raw.githubusercontent.com/upstreamcolor/AQI_Analysis-Snowflake/refs/heads/main/icons/githubactions.svg" width="20" />
 
 An end-to-end data pipeline in Snowflake to ingest, process, and visualize hourly AQI data, transforming raw JSON data into structured fact and dimension tables for real-time insights via a Streamlit dashboard.
 
-#### 📁 Folder Structure
 ---
+
+### 🛠️ Deep Down Technical Details
+
+* __Data Ingestion__
+
+    * Hourly AQI data is fetched in JSON format from an external REST API
+
+    * Ingestion is automated and scheduled using GitHub Actions
+
+    * Raw API responses are loaded into a stage, ```RAW_STG``` in Snowflake
+
+* __Bronze Layer (Raw data)__
+
+    * Raw JSON payloads are persisted in a transient table, ```RAW_AQI``` in ```STAGE_SCH``` schema along with ingestion metadata
+
+* __Silver Layer (Cleaned data)__
+
+    * Tasks are used to automate the flattening and transformation of semi-structured JSON data
+
+    * Transformed data is stored in a dynamic table, ```CLEAN_FLATTEN_AQI_DT``` in ```CLEAN_SCH``` schema enabling near-real-time data availability and simplified dependency management
+
+* __Gold Layer (Modeled and Aggregated data)__
+
+    * Curated data is modeled into a star schema for analytics
+
+    * AQI metrics are aggregated at a daily grain and stored in ```AIR_QUALITY_FACT``` fact table in ```CONSUMPTION_SCH``` schema
+
+    * Supporting date (```DIM_DATE```) and location (```DIM_LOCATION```) dimension tables are created in ```CONSUMPTION_SCH``` schema to enable efficient analytical queries
+
+* Optimization & Maintenance
+
+    * Dynamic Tables are leveraged to manage data freshness and reduce manual orchestration
+
+* Data Visualization
+
+    * Aggregated AQI data is expressed through a Streamlit dashboard
+
+    * The dashboard presents daily AQI trends and location-based air quality insights
+
+---
+
+### 📁 Folder Structure
 ```
 AQI_Analysis-Snowflake/
 │
@@ -19,5 +60,7 @@ AQI_Analysis-Snowflake/
 │   ├── githubactions.svg
 │   ├── snowflake.svg
 │   └── streamlit.svg
-└── README.md                               # project documentation
+└── README.md                             # project documentation
 ```
+---
+
