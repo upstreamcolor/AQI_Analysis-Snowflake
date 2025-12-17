@@ -1,2 +1,2 @@
 # AQI Analysis
-![Alt text](\icons\snowflake.svg) | ![Alt text](\icons\streamlit.svg) | ![Alt text](\icons\githubactions.svg)
+![Alt text](https://github.com/upstreamcolor/AQI_Analysis-Snowflake/blob/main/icons/snowflake.svg) | ![Alt text](https://github.com/upstreamcolor/AQI_Analysis-Snowflake/blob/main/icons/streamlit.svg) | ![Alt text](https://github.com/upstreamcolor/AQI_Analysis-Snowflake/blob/main/icons/githubactions.svg)
