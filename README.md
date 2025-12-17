@@ -48,6 +48,10 @@ An end-to-end data pipeline in Snowflake to ingest, process, and visualize hourl
 ```
 AQI_Analysis-Snowflake/
 │
+├── icons/                                  
+│   ├── githubactions.svg
+│   ├── snowflake.svg
+│   └── streamlit.svg
 ├── sql_scripts/                            
 │   ├── 01-wh_db_schema.sql               # schema, sarehouses for ingestion, transformation & consumption
 │   ├── 02-stg_ff_task.sql                # stage, file format, task & transient table (bronze layer)
@@ -56,10 +60,6 @@ AQI_Analysis-Snowflake/
 │   ├── 05-wide_table_consumption.sql     # python UDFs, AQI calc. & storage in a wide transformed table
 │   ├── 06-fact_and_dim.sql               # location & date dimension tables, AQI fact table (gold layer)
 │   └── 07-aggregated_fact_table.sql      # hourly & daily aggregated data (gold layer)
-├── icons/                                  
-│   ├── githubactions.svg
-│   ├── snowflake.svg
-│   └── streamlit.svg
 └── README.md                             # project documentation
 ```
 ---
