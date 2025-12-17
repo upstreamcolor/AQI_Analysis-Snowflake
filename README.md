@@ -32,11 +32,11 @@ An end-to-end data pipeline in Snowflake to ingest, process, and visualize hourl
 
     * Supporting date (```DIM_DATE```) and location (```DIM_LOCATION```) dimension tables are created in ```CONSUMPTION_SCH``` schema to enable efficient analytical queries
 
-* Optimization & Maintenance
+* __Optimization & Maintenance__
 
     * Dynamic Tables are leveraged to manage data freshness and reduce manual orchestration
 
-* Data Visualization
+* __Data Visualization__
 
     * Aggregated AQI data is expressed through a Streamlit dashboard
 
