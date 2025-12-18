@@ -4,9 +4,9 @@ An end-to-end data pipeline in Snowflake to ingest, process, and visualize hourl
 
 ---
 
-### 🛠️ Deep Down Technical Details
+### 🛠️ Technical Breakdown
 
-* __Data Ingestion__
+* 📥 __Data Ingestion__
 
     * Hourly AQI data is fetched in JSON format from an external REST API
 
@@ -14,17 +14,17 @@ An end-to-end data pipeline in Snowflake to ingest, process, and visualize hourl
 
     * Raw API responses are loaded into a stage, ```RAW_STG``` in Snowflake
 
-* __Bronze Layer (Raw data)__
+* 🥉 __Bronze Layer (Raw data)__
 
     * Raw JSON payloads are persisted in a transient table, ```RAW_AQI``` in ```STAGE_SCH``` schema along with ingestion metadata
 
-* __Silver Layer (Cleaned data)__
+* 🥈 __Silver Layer (Cleaned data)__
 
     * Tasks are used to automate the flattening and transformation of semi-structured JSON data
 
     * Transformed data is stored in a dynamic table, ```CLEAN_FLATTEN_AQI_DT``` in ```CLEAN_SCH``` schema enabling near-real-time data availability and simplified dependency management
 
-* __Gold Layer (Modeled and Aggregated data)__
+* 🥇 __Gold Layer (Modeled and Aggregated data)__
 
     * Curated data is modeled into a star schema for analytics
 
@@ -32,11 +32,11 @@ An end-to-end data pipeline in Snowflake to ingest, process, and visualize hourl
 
     * Supporting date (```DIM_DATE```) and location (```DIM_LOCATION```) dimension tables are created in ```CONSUMPTION_SCH``` schema to enable efficient analytical queries
 
-* __Optimization & Maintenance__
+* 🔧 __Optimization & Maintenance__
 
     * Dynamic Tables are leveraged to manage data freshness and reduce manual orchestration
 
-* __Data Visualization__
+* 📊 __Data Visualization__
 
     * Aggregated AQI data is expressed through a Streamlit dashboard
 
