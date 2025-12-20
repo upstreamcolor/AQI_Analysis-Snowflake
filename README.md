@@ -1,4 +1,4 @@
-## AQI Data Pipeline | <img src="https://raw.githubusercontent.com/upstreamcolor/AQI_Analysis-Snowflake/refs/heads/main/icons/snowflake.svg" width="18" /> <img src="https://raw.githubusercontent.com/upstreamcolor/AQI_Analysis-Snowflake/refs/heads/main/icons/streamlit.svg" width="18" /> <img src="https://raw.githubusercontent.com/upstreamcolor/AQI_Analysis-Snowflake/refs/heads/main/icons/githubactions.svg" width="18" />
+## AQI Data Pipeline | <img src="https://raw.githubusercontent.com/upstreamcolor/AQI_Analysis-Snowflake/refs/heads/main/icons/snowflake.svg" width="18" /> <img src="https://raw.githubusercontent.com/upstreamcolor/AQI_Analysis-Snowflake/refs/heads/main/icons/streamlit.svg" width="18" /> <img src="https://raw.githubusercontent.com/upstreamcolor/AQI_Analysis-Snowflake/refs/heads/main/icons/githubactions.svg" width="18" /> 
 
 An end-to-end data pipeline in Snowflake to ingest, process, and visualize hourly AQI data, transforming raw JSON data into structured fact and dimension tables for real-time insights via a Streamlit dashboard.
 
@@ -6,7 +6,8 @@ An end-to-end data pipeline in Snowflake to ingest, process, and visualize hourl
 
 ### 🛠️ Technical Breakdown
 
-* 📥 __Data Ingestion__
+* 📥 __Data Ingestion__ <img src="https://github.com/upstreamcolor/AQI_Analysis-Snowflake/actions/workflows/data_ingest.yml/badge.svg"
+alt="AQI Data Load from API" style="float: right;" />
 
     * Hourly AQI data is fetched in JSON format from an external REST API
 
