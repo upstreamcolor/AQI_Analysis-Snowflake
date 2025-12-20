@@ -7,9 +7,9 @@ An end-to-end data pipeline in Snowflake to ingest, process, and visualize hourl
 ### 🛠️ Technical Breakdown
 
 * 📥 __Data Ingestion__
-<img src="https://github.com/upstreamcolor/AQI_Analysis-Snowflake/actions/workflows/data_ingest.yml/badge.svg"
+(<img src="https://github.com/upstreamcolor/AQI_Analysis-Snowflake/actions/workflows/data_ingest.yml/badge.svg"
      alt="AQI Data Load from API"
-     style="float: right;" />
+     width="130" />)
 
     * Hourly AQI data is fetched in JSON format from an external REST API
 
