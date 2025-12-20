@@ -5,8 +5,7 @@ from decimal import Decimal
 from snowflake.snowpark.context import get_active_session
 
 # page Title
-st.title("AQI Trends | Station Level")
-st.write("This streamlit app hosted on Snowflake")
+st.title("Hourly AQI Trends | Station Level")
 
 # get Session
 session = get_active_session()

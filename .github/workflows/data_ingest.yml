@@ -1,10 +1,10 @@
 name: AQI Data Load from API
 
 on:
-  schedule:
-    - cron: "0 * * * *"   # runs every hour (UTC)
+  #schedule:
+  #  - cron: "0 * * * *"   # runs every hour (UTC)
   
-  #workflow_dispatch: 
+  workflow_dispatch: 
 
 jobs:
   run-ingest-script:
@@ -34,7 +34,7 @@ jobs:
           SNOWFLAKE_SCHEMA: ${{ vars.SNOWFLAKE_SCHEMA }}
           API_LIMIT: ${{ vars.API_LIMIT }}
           SNOWFLAKE_PASSWORD: ${{ secrets.SNOWFLAKE_PASSWORD }}
-          AIR_QUALITY_API_KEY: ${{ secrets.AIR_QUALITY_API_KEY }}
+          AIR_QUALITY_API_KEY: ${{ secrets.API_KEY }}
 
         run: |
           python ingest-api-data.py
