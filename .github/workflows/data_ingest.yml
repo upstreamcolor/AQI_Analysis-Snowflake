@@ -21,7 +21,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip install requests snowflake-snowpark-python pytz
+          pip install requests snowflake-snowpark-python python-dotenv pytz
 
       - name: Run air quality script
         env:

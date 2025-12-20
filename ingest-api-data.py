@@ -4,6 +4,8 @@ from datetime import datetime
 from snowflake.snowpark import Session
 import sys
 import pytz
+from dotenv import load_dotenv
+load_dotenv()
 import os
 import logging
 
@@ -48,7 +50,7 @@ def get_air_quality_data(api_key, limit):
         'limit': limit
     }
 
-    # Headers for the API request
+    # headers for the API request
     headers = {
         'accept': 'application/json'
     }
@@ -58,6 +60,7 @@ def get_air_quality_data(api_key, limit):
         response = requests.get(api_url, params = params, headers = headers)
 
         logging.info('Response received from the API')
+        
         # check if the request was successful (status code 200)
         if response.status_code == 200:
 
@@ -108,5 +111,5 @@ def get_air_quality_data(api_key, limit):
     return None
 
 api_key = os.getenv("API_KEY")
-limit_value = int(os.getenv("API_LIMIT"))
+limit_value = int(os.getenv("API_LIMIT", "4000"))
 air_quality_data = get_air_quality_data(api_key, limit_value)
