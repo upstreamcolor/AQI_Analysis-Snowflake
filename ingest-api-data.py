@@ -2,6 +2,7 @@ import requests
 import json
 from datetime import datetime
 from snowflake.snowpark import Session
+from dateutil.parser import parse
 import sys
 import pytz
 from dotenv import load_dotenv
@@ -27,7 +28,7 @@ def snowpark_basic_auth() -> Session:
     return Session.builder.configs(connection_parameters).create()
 
 def get_air_quality_data(api_key, limit):
-    api_url = 'https://api.data.gov.in/resource/3b01bcb8-0b14-4abf-b6f2-c1bfd384ba69'
+    api_url = os.getenv("API_URL")
     
     # parameters for the API request
     params = {
@@ -57,7 +58,11 @@ def get_air_quality_data(api_key, limit):
 
             # get the first occurence of `last_update`` from records [{}]
             last_update_str = json_data.get("records", [{}])[0].get("last_update")
-            last_update = datetime.strptime(last_update_str, '%Y-%m-%dT%H:%M:%S.%f')
+            if not last_update_str:
+                logging.error("No last_update found in API response.")
+                sys.exit(1)
+
+            last_update = parse(last_update_str)
 
             # create the file name
             file_name = f'air_quality_data_{last_update.strftime("%Y_%m_%d_%H_%M_%S")}.json'
@@ -87,7 +92,7 @@ def get_air_quality_data(api_key, limit):
                 with open(file_name, 'w') as json_file:
                     json.dump(json_data, json_file, indent = 2)
                 
-                logging.info(f'File Written to local disk with name: {file_name}')
+                logging.info(f'File written to local disk with name: {file_name}')
 
                 # place the file from local to snowflake stage
                 logging.info(f'Placing the file, {file_name} in stage location, {stg_location}')
