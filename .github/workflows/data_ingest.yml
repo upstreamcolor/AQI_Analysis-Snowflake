@@ -1,0 +1,40 @@
+name: AQI Data Load from API
+
+on:
+  schedule:
+    - cron: "0 * * * *"   # runs every hour (UTC)
+  
+  #workflow_dispatch: 
+
+jobs:
+  run-ingest-script:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          pip install requests snowflake-snowpark-python pytz
+
+      - name: Run air quality script
+        env:
+
+          SNOWFLAKE_ACCOUNT: ${{ vars.SNOWFLAKE_ACCOUNT }}
+          SNOWFLAKE_USER: ${{ vars.SNOWFLAKE_USER }}
+          SNOWFLAKE_ROLE: ${{ vars.SNOWFLAKE_ROLE }}
+          SNOWFLAKE_WAREHOUSE: ${{ vars.SNOWFLAKE_WAREHOUSE }}
+          SNOWFLAKE_DATABASE: ${{ vars.SNOWFLAKE_DATABASE }}
+          SNOWFLAKE_SCHEMA: ${{ vars.SNOWFLAKE_SCHEMA }}
+          API_LIMIT: ${{ vars.API_LIMIT }}
+          SNOWFLAKE_PASSWORD: ${{ secrets.SNOWFLAKE_PASSWORD }}
+          AIR_QUALITY_API_KEY: ${{ secrets.AIR_QUALITY_API_KEY }}
+
+        run: |
+          python ingest-api-data.py
