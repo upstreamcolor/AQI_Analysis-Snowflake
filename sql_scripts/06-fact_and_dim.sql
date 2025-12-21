@@ -40,7 +40,7 @@ AS
 SELECT
     *
 FROM
-    date_dim;
+    dim_date;
 
 -- create dimension table `dim_location` to store location data
 CREATE OR REPLACE DYNAMIC TABLE dim_location
@@ -66,7 +66,7 @@ AS
             ,6
     )
     SELECT
-        HASH(LATITUDE, LONGITUDE) AS location_id
+        HASH(LATITUDE, LONGITUDE) AS location_pk
         ,*
     FROM
         step01_unique_data

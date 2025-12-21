@@ -40,7 +40,7 @@ AS
                 latest_file_rank = 1
         )
     SELECT
-        index_record_ts,
+        index_record_ts
         ,hourly_rec.value:country::TEXT AS country
         ,hourly_rec.value:state::TEXT AS state
         ,hourly_rec.value:city::TEXT AS city
