@@ -4,6 +4,12 @@ An end-to-end data pipeline in Snowflake to ingest, process, and visualize hourl
 
 ---
 
+### 🏗️ Project Architecture
+
+<img src="https://raw.githubusercontent.com/upstreamcolor/AQI_Analysis-Snowflake/refs/heads/main/icons/project_arch.svg" width="1500" /> 
+
+---
+
 ### 🛠️ Technical Breakdown
 
 * 📥 __Data Ingestion__
@@ -41,7 +47,7 @@ An end-to-end data pipeline in Snowflake to ingest, process, and visualize hourl
 
 * 📊 __Data Visualization__
 
-    * Aggregated AQI data is expressed through a Streamlit dashboard
+    * Aggregated AQI data is expressed through a Streamlit dashboard hosted in ```PUBLISH_SCH``` schema
 
     * The dashboard presents daily AQI trends and location-based air quality insights
 
@@ -51,18 +57,28 @@ An end-to-end data pipeline in Snowflake to ingest, process, and visualize hourl
 ```
 AQI_Analysis-Snowflake/
 │
+├── .github\workflows/ 
+│   └── data_ingest.yml                   # action to schedule API call
+├── dashboard_screenshots/
+│   ├── 01-dashboard_station_level.png
+│   └── 02-dashboard_map_state_level.png  
 ├── icons/                                  
 │   ├── githubactions.svg
+|   ├── project_arch.svg
 │   ├── snowflake.svg
 │   └── streamlit.svg
 ├── sql_scripts/                            
-│   ├── 01-wh_db_schema.sql               # schema, sarehouses for ingestion, transformation & consumption
+│   ├── 01-wh_db_schema.sql               # schema, warehouses for ingestion, transformation & consumption
 │   ├── 02-stg_ff_task.sql                # stage, file format, task & transient table (bronze layer)
 │   ├── 03-clean_layer_dt.sql             # dynamic table to store cleaned raw data (silver layer)
 │   ├── 04-clean_layer_transpose_dt.sql   # dynamic table to store flattened data (silver layer)
 │   ├── 05-wide_table_consumption.sql     # python UDFs, AQI calc. & storage in a wide transformed table
 │   ├── 06-fact_and_dim.sql               # location & date dimension tables, AQI fact table (gold layer)
 │   └── 07-aggregated_fact_table.sql      # hourly & daily aggregated data (gold layer)
+├── sql_scripts/                            
+│   ├── 01-dashboard_station_level.py     # weathar station level dashboard         
+│   └── 02-dashboard_map_state_level.py   # state level dashboard
+├── ingest-api-data.py
 └── README.md                             # project documentation
 ```
 ---
