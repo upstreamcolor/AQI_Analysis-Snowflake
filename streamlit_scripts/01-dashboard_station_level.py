@@ -11,7 +11,7 @@ st.title("Hourly AQI Trends | Station Level")
 session = get_active_session()
 
 # variables
-state_option,city_option, station_option, date_option  = '','','',''
+state_option, city_option, station_option, date_option  = '','','',''
 
 state_query = """
     SELECT 
