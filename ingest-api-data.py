@@ -55,8 +55,15 @@ def get_air_quality_data(api_key, limit):
             
             # parse the JSON data from the response
             json_data = response.json()
+            
+            # checking whether `records` is present or not
+            records = json_data.get("records")
 
-            # get the first occurence of `last_update`` from records [{}]
+            if not records or len(records) == 0:
+                logging.error("API response contains no records.")
+                sys.exit(1)
+
+            # get the first occurence of `last_update` from records [{}]
             last_update_str = json_data.get("records", [{}])[0].get("last_update")
             if not last_update_str:
                 logging.error("No last_update found in API response.")
@@ -113,7 +120,7 @@ def get_air_quality_data(api_key, limit):
 
     except Exception as e:
         # handle exceptions, if any
-        logging.error(f'An error occurred: {e}')
+        logging.error(f'{e}')
         sys.exit(1)
         
     return None
