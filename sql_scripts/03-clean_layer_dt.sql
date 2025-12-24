@@ -48,9 +48,9 @@ AS
         ,hourly_rec.value:latitude::NUMBER(12, 7) AS latitude
         ,hourly_rec.value:longitude::NUMBER(12, 7) AS longitude
         ,hourly_rec.value:pollutant_id::TEXT AS pollutant_id
-        ,hourly_rec.value:pollutant_max::TEXT AS pollutant_max
-        ,hourly_rec.value:pollutant_min::TEXT AS pollutant_min
-        ,hourly_rec.value:pollutant_avg::TEXT AS pollutant_avg
+        ,hourly_rec.value:max_value::TEXT AS pollutant_max
+        ,hourly_rec.value:min_value::TEXT AS pollutant_min
+        ,hourly_rec.value:avg_value::TEXT AS pollutant_avg
         ,_stg_file_name
         ,_stg_file_load_ts
         ,_stg_file_md5
