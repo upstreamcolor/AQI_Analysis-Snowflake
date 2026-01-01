@@ -60,8 +60,10 @@ AQI_Analysis-Snowflake/
 ├── .github\workflows/ 
 │   └── data_ingest.yml                   # action to schedule API call
 ├── dashboard_screenshots/
-│   ├── 01-dashboard_station_level.png
-│   └── 02-dashboard_map_state_level.png  
+│   ├── 01-dashboard_map_state_level.png
+|   ├── 01-dashboard_station_level.png
+|   ├── 02-dashboard_station_level.png
+│   └── 03-dashboard_station_level.png 
 ├── icons/                                  
 │   ├── githubactions.svg
 |   ├── project_arch.svg
